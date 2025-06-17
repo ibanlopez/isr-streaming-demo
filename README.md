@@ -14,7 +14,7 @@ This project proves that ISR and Streaming are **not mutually exclusive** but ra
 
 ### Core Concept
 
-\`\`\`
+```
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
 │   Static (ISR)  │    │  Dynamic Stream  │    │  User Experience│
 │                 │    │                  │    │                 │
@@ -23,7 +23,7 @@ This project proves that ISR and Streaming are **not mutually exclusive** but ra
 │ • Layout        │    │ • User-specific  │    │ • Progressive   │
 │ • SEO metadata  │    │   data           │    │   enhancement   │
 └─────────────────┘    └──────────────────┘    └─────────────────┘
-\`\`\`
+```
 
 ## 🧪 Testing Streaming Behavior
 
@@ -32,24 +32,28 @@ This project proves that ISR and Streaming are **not mutually exclusive** but ra
 This project includes several pages specifically designed to test and demonstrate streaming:
 
 #### 1. **Streaming Test Page** (`/en/streaming-test`)
+
 - **Purpose**: Isolated test of streaming functionality
-- **What to expect**: 
+- **What to expect**:
   - Instant content loads immediately
   - 3 components stream in at 1s, 2s, and 3s intervals
   - Clear visual indicators and console logging
 - **Console output**: Shows timing of each component load
 
 #### 2. **Blog Listing** (`/en/blog`)
+
 - **ISR disabled** (`revalidate = 0`) to force streaming every time
 - **What to expect**: Blog skeleton for 2 seconds, then real content
 - **Console output**: `📝 getBlogPosts called` and completion logs
 
 #### 3. **Homepage** (`/en`)
+
 - **Mixed strategy**: Static hero/text + streaming testimonials
 - **What to expect**: Hero loads instantly, testimonials stream in after 3 seconds
 - **Console output**: Component separation and streaming logs
 
 #### 4. **About Page** (`/en/about`)
+
 - **Mixed strategy**: Static story + streaming image gallery
 - **What to expect**: Story loads instantly, gallery streams in after 3 seconds
 - **Console output**: Image gallery component streaming logs
@@ -59,7 +63,8 @@ This project includes several pages specifically designed to test and demonstrat
 If you don't see streaming behavior:
 
 1. **Check Browser Console**
-   \`\`\`
+
+   ```
    📄 Homepage loaded for en
    📊 Total components: 3
    ⚡ Static components: 2
@@ -69,14 +74,16 @@ If you don't see streaming behavior:
    ⏱️  Starting 3000ms delay...
    ✅ 3000ms delay completed
    ✅ Loaded streaming component: testimonials-1
-   \`\`\`
+   ```
 
 2. **Disable Browser Cache**
+
    - Open DevTools → Network tab
    - Check "Disable cache"
    - Hard refresh (Ctrl+Shift+R / Cmd+Shift+R)
 
 3. **Check Network Tab**
+
    - Look for streaming responses
    - Monitor timing of requests
 
@@ -87,7 +94,8 @@ If you don't see streaming behavior:
 ### Expected Console Output
 
 #### Homepage Load:
-\`\`\`
+
+```
 📄 getPage called: slug="", language="en"
 📄 getPage result: found
 📄 Homepage loaded for en
@@ -103,10 +111,11 @@ If you don't see streaming behavior:
 ✅ 3000ms delay completed
 🧩 getComponent: found component "testimonials-1"
 ✅ Loaded streaming component: testimonials-1
-\`\`\`
+```
 
 #### Blog Page Load:
-\`\`\`
+
+```
 📄 Blog page accessed for en
 🔄 Loading blog posts for en
 📝 getBlogPosts called: language="en", limit=undefined
@@ -114,11 +123,11 @@ If you don't see streaming behavior:
 ✅ 2000ms delay completed
 📝 getBlogPosts: returning 3 posts
 ✅ Loaded 3 blog posts for en
-\`\`\`
+```
 
 ## 📁 Project Structure
 
-\`\`\`
+```
 ├── app/
 │   ├── [lang]/                    # Multi-language routing
 │   │   ├── layout.tsx            # Root layout with ISR header/footer
@@ -139,14 +148,15 @@ If you don't see streaming behavior:
 │   ├── cms.ts                    # Simulated CMS with debug logging
 │   └── types.ts                  # TypeScript definitions
 └── middleware.ts                 # Language routing
-\`\`\`
+```
 
 ## 🔄 How ISR + Streaming Works Per Page
 
 ### 1. Root Layout (`app/[lang]/layout.tsx`)
 
 **ISR Strategy**: Long revalidation (1 hour)
-\`\`\`tsx
+
+```tsx
 export const revalidate = 3600 // 1 hour
 
 // Header and footer are statically generated
@@ -154,7 +164,7 @@ export const revalidate = 3600 // 1 hour
 <Header language={lang} />      // ISR cached
 <main>{children}</main>         // Page-specific strategy
 <Footer language={lang} />      // ISR cached
-\`\`\`
+```
 
 **Why ISR**: Navigation and global elements change infrequently but need to be fast.
 
@@ -162,23 +172,28 @@ export const revalidate = 3600 // 1 hour
 
 **Mixed Strategy**: ISR for static components + Streaming for dynamic ones
 
-\`\`\`tsx
-export const revalidate = 300 // 5 minutes
+```tsx
+export const revalidate = 300; // 5 minutes
 
 // Static components render immediately (ISR)
-{staticComponents.map(component => 
-  <CMSComponentRenderer component={component} />
-)}
+{
+  staticComponents.map((component) => (
+    <CMSComponentRenderer component={component} />
+  ));
+}
 
 // Dynamic components stream in with Suspense
-{streamingComponents.map(component => (
-  <Suspense fallback={<LoadingSkeleton />}>
-    <DynamicComponent componentId={component.id} />
-  </Suspense>
-))}
-\`\`\`
+{
+  streamingComponents.map((component) => (
+    <Suspense fallback={<LoadingSkeleton />}>
+      <DynamicComponent componentId={component.id} />
+    </Suspense>
+  ));
+}
+```
 
 **Flow**:
+
 1. User visits page → Static hero/text loads instantly (ISR cache)
 2. Testimonials component streams in progressively (3 second delay)
 3. User sees content immediately, enhanced progressively
@@ -187,15 +202,15 @@ export const revalidate = 300 // 5 minutes
 
 **Streaming Only Strategy**: Force fresh data every time
 
-\`\`\`tsx
-export const revalidate = 0 // Force dynamic rendering
+```tsx
+export const revalidate = 0; // Force dynamic rendering
 
 return (
   <Suspense fallback={<BlogListingLoadingSkeleton />}>
     <BlogContent language={lang} />
   </Suspense>
-)
-\`\`\`
+);
+```
 
 **Why Streaming Only**: Blog listings need to be fresh to show latest posts.
 
@@ -203,28 +218,29 @@ return (
 
 **Perfect ISR + Streaming Example**:
 
-\`\`\`tsx
-export const revalidate = 3600 // 1 hour for blog content
+```tsx
+export const revalidate = 3600; // 1 hour for blog content
 
 return (
   <div>
     {/* Static blog content - ISR cached */}
     <StaticBlogContent slug={slug} language={lang} />
-    
+
     {/* Dynamic comments - always fresh, streamed */}
     <Suspense fallback={<CommentsLoadingSkeleton />}>
       <DynamicComments slug={slug} language={lang} />
     </Suspense>
-    
+
     {/* Related posts - fresh recommendations, streamed */}
     <Suspense fallback={<RelatedPostsLoadingSkeleton />}>
       <RelatedPosts slug={slug} language={lang} />
     </Suspense>
   </div>
-)
-\`\`\`
+);
+```
 
 **User Experience**:
+
 1. **0ms**: Blog post content appears (from ISR cache)
 2. **~2.5s**: Comments start streaming in
 3. **~2s**: Related posts appear
@@ -234,27 +250,27 @@ return (
 
 **Pure Streaming Strategy**: Demonstrate streaming in isolation
 
-\`\`\`tsx
-export const revalidate = 0 // Force dynamic rendering
+```tsx
+export const revalidate = 0; // Force dynamic rendering
 
 return (
   <div>
     <div>Instant content (no Suspense)</div>
-    
+
     <Suspense fallback={<LoadingSkeleton name="Component 1" />}>
       <SlowComponent delay={1000} name="Component 1" />
     </Suspense>
-    
+
     <Suspense fallback={<LoadingSkeleton name="Component 2" />}>
       <SlowComponent delay={2000} name="Component 2" />
     </Suspense>
-    
+
     <Suspense fallback={<LoadingSkeleton name="Component 3" />}>
       <SlowComponent delay={3000} name="Component 3" />
     </Suspense>
   </div>
-)
-\`\`\`
+);
+```
 
 **Purpose**: Clear demonstration of streaming behavior with visual indicators.
 
@@ -264,39 +280,40 @@ return (
 
 Each CMS component defines its own caching strategy:
 
-\`\`\`tsx
+```tsx
 // In CMS data structure
 {
   id: "testimonials-1",
   type: "testimonials",
   content: {...},
-  settings: { 
+  settings: {
     revalidate: 300,    // 5 minutes ISR
     streaming: true     // Stream this component
   }
 }
-\`\`\`
+```
 
 ### Common Components (Header/Footer)
 
-\`\`\`tsx
+```tsx
 // components/layout/header.tsx
 export default async function Header({ language }) {
   // This function is cached by ISR at the layout level
   const [navigation, globalSettings] = await Promise.all([
-    getNavigation(language),      // Cached for 1 hour
-    getGlobalSettings(language)   // Cached for 1 hour
-  ])
-  
-  return <nav>...</nav>
+    getNavigation(language), // Cached for 1 hour
+    getGlobalSettings(language), // Cached for 1 hour
+  ]);
+
+  return <nav>...</nav>;
 }
-\`\`\`
+```
 
 **Why this works**: Header/footer render once per ISR cycle, then serve from cache.
 
 ## 🚀 Production vs Development Behavior
 
 ### Development Environment
+
 - **Network**: Localhost (instant)
 - **Streaming**: Very noticeable delays (2-3 seconds)
 - **ISR**: Often bypassed in dev mode
@@ -306,52 +323,55 @@ export default async function Header({ language }) {
 ### Production Environment
 
 #### First Visit
+
 - **Static content**: ~100-200ms (from CDN)
 - **Comments**: ~500-1000ms (API call)
 - **Related posts**: ~300-800ms (API call)
 
 #### Subsequent Visits (ISR Cache Hit)
+
 - **Static content**: ~50ms (cached)
 - **Comments**: Still fresh (~500-1000ms)
 - **Related posts**: Still fresh (~300-800ms)
 
 #### After ISR Revalidation
+
 - **Background regeneration** occurs
 - **Users see stale content** until new version ready
 - **Seamless updates** without downtime
 
 ### Production Optimizations
 
-\`\`\`tsx
+```tsx
 // Production-ready error handling
 try {
-  const comments = await getBlogComments(post.id)
-  return <CommentsSection comments={comments} />
+  const comments = await getBlogComments(post.id);
+  return <CommentsSection comments={comments} />;
 } catch (error) {
-  return <ErrorFallback message="Comments temporarily unavailable" />
+  return <ErrorFallback message="Comments temporarily unavailable" />;
 }
-\`\`\`
+```
 
 ## 🔧 Revalidation Strategies
 
 ### Time-based Revalidation
 
-\`\`\`tsx
+```tsx
 // Different strategies for different content types
 export const revalidate = {
-  layout: 3600,      // 1 hour - navigation rarely changes
-  homepage: 300,     // 5 minutes - moderate freshness
-  about: 1800,       // 30 minutes - static company info
-  blog: 3600,        // 1 hour - article content stable
-  blogListing: 0,    // Always fresh - latest posts
-  streamingTest: 0,  // Always fresh - for testing
-  legal: 86400       // 24 hours - policies change rarely
-}
-\`\`\`
+  layout: 3600, // 1 hour - navigation rarely changes
+  homepage: 300, // 5 minutes - moderate freshness
+  about: 1800, // 30 minutes - static company info
+  blog: 3600, // 1 hour - article content stable
+  blogListing: 0, // Always fresh - latest posts
+  streamingTest: 0, // Always fresh - for testing
+  legal: 86400, // 24 hours - policies change rarely
+};
+```
 
 ### On-demand Revalidation
 
-\`\`\`bash
+```bash
 # Webhook from CMS when content updates
 POST /api/revalidate
 {
@@ -360,26 +380,30 @@ POST /api/revalidate
   "language": "en",
   "secret": "webhook-secret"
 }
-\`\`\`
+```
 
 ## 🎯 Key Benefits Demonstrated
 
 ### 1. **Performance**
+
 - **TTFB**: ~50-200ms for static content
 - **LCP**: Improved by serving static content first
 - **CLS**: Prevented by dimension-matched skeletons
 
 ### 2. **User Experience**
+
 - **Immediate content**: Users see main content instantly
 - **Progressive enhancement**: Dynamic content loads without blocking
 - **Perceived performance**: Feels faster than traditional SSR
 
 ### 3. **Developer Experience**
+
 - **Clear separation**: Static vs dynamic content boundaries
 - **Flexible caching**: Different strategies per component
 - **Easy debugging**: Console logging and visual indicators
 
 ### 4. **SEO Benefits**
+
 - **Static content indexed**: Search engines see full content
 - **Fast page loads**: Better Core Web Vitals
 - **Dynamic freshness**: Comments/interactions stay current
@@ -387,17 +411,20 @@ POST /api/revalidate
 ## 🧪 Testing the Compatibility
 
 ### Verify ISR is Working
+
 1. Visit a page twice - second visit should be faster
 2. Check Network tab - static content serves from cache
 3. Wait for revalidation period - content updates in background
 
 ### Verify Streaming is Working
+
 1. **Visit `/en/streaming-test`** - Most reliable test
 2. Open Network tab with throttling
 3. Watch components load progressively
 4. Check browser console for timing logs
 
 ### Verify They Work Together
+
 1. **Homepage** (`/en`): Hero loads instantly (ISR), testimonials stream in (Suspense)
 2. **Blog post**: Article loads instantly (ISR), comments stream in (Suspense)
 3. Both work simultaneously without conflicts
@@ -414,13 +441,13 @@ If streaming isn't visible:
 
 ### Console Debug Commands
 
-\`\`\`javascript
+```javascript
 // In browser console, check if streaming is working
-console.log('Streaming test - check for delays...')
+console.log("Streaming test - check for delays...");
 
 // Monitor network requests
-performance.getEntriesByType('navigation')
-\`\`\`
+performance.getEntriesByType("navigation");
+```
 
 ## 🚀 Deployment
 
@@ -431,6 +458,7 @@ This architecture works perfectly in production with:
 - **Self-hosted**: With proper CDN setup
 
 ### Production Checklist
+
 - ✅ ISR revalidation times configured
 - ✅ Suspense fallbacks implemented
 - ✅ Error boundaries added
@@ -462,6 +490,7 @@ This project demonstrates that:
 ## 🐛 Debug Information
 
 ### Expected Delays
+
 - **Static content**: ~100ms
 - **Blog listing**: 2 seconds
 - **Streaming components**: 3 seconds
@@ -469,7 +498,8 @@ This project demonstrates that:
 - **Related posts**: 2 seconds
 
 ### Console Log Patterns
-\`\`\`
+
+```
 📄 Page loads
 📊 Component analysis
 ⚡ Static rendering
@@ -477,9 +507,10 @@ This project demonstrates that:
 🔄 Component loading
 ⏱️ Delay timing
 ✅ Completion
-\`\`\`
+```
 
 ### Visual Indicators
+
 - **Debug banners**: Colored bars showing loading state
 - **Skeleton animations**: Pulse effects during loading
 - **Console timestamps**: Precise timing information
