@@ -206,6 +206,28 @@ const cmsData = {
             },
             settings: { revalidate: 60, streaming: true },
           },
+          {
+            id: "test-streaming-gallery",
+            type: "image-gallery" as const,
+            content: {
+              title: "Dynamic Image Gallery (3s delay)",
+              images: [
+                {
+                  id: "1",
+                  src: "/placeholder.svg?height=300&width=400",
+                  alt: "Streaming Image 1",
+                  caption: "This image loaded via streaming",
+                },
+                {
+                  id: "2",
+                  src: "/placeholder.svg?height=300&width=400",
+                  alt: "Streaming Image 2",
+                  caption: "This image also streamed in",
+                },
+              ],
+            },
+            settings: { revalidate: 0, streaming: true },
+          },
         ],
         updatedAt: new Date().toISOString(),
       },
@@ -395,6 +417,28 @@ const cmsData = {
               ],
             },
             settings: { revalidate: 60, streaming: true },
+          },
+          {
+            id: "test-streaming-gallery",
+            type: "image-gallery" as const,
+            content: {
+              title: "Dynamic Image Gallery (3s delay)",
+              images: [
+                {
+                  id: "1",
+                  src: "/placeholder.svg?height=300&width=400",
+                  alt: "Streaming Image 1",
+                  caption: "This image loaded via streaming",
+                },
+                {
+                  id: "2",
+                  src: "/placeholder.svg?height=300&width=400",
+                  alt: "Streaming Image 2",
+                  caption: "This image also streamed in",
+                },
+              ],
+            },
+            settings: { revalidate: 0, streaming: true },
           },
         ],
         updatedAt: new Date().toISOString(),
