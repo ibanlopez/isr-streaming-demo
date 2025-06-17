@@ -1,15 +1,22 @@
-import type { CMSPage, CMSComponent, CMSNavigation, CMSGlobalSettings, CMSBlogPost, CMSBlogComment } from "./types"
+import type {
+  CMSPage,
+  CMSComponent,
+  CMSNavigation,
+  CMSGlobalSettings,
+  CMSBlogPost,
+  CMSBlogComment,
+} from "./types";
 
 // Realistic delays with console logging for debugging
 const delay = (ms: number) => {
-  console.log(`⏱️  Starting ${ms}ms delay...`)
+  console.log(`⏱️  Starting ${ms}ms delay...`);
   return new Promise((resolve) => {
     setTimeout(() => {
-      console.log(`✅ ${ms}ms delay completed`)
-      resolve(undefined)
-    }, ms)
-  })
-}
+      console.log(`✅ ${ms}ms delay completed`);
+      resolve(undefined);
+    }, ms);
+  });
+};
 
 // Simulated CMS data
 const cmsData = {
@@ -125,12 +132,79 @@ const cmsData = {
             type: "cta" as const,
             content: {
               title: "Ready to Work Together?",
-              description: "Let's discuss your next project and how we can help you achieve your goals.",
+              description:
+                "Let's discuss your next project and how we can help you achieve your goals.",
               buttonText: "Contact Us",
               buttonLink: "/en/contact",
               backgroundColor: "bg-blue-600",
             },
             settings: { revalidate: 3600, streaming: false },
+          },
+        ],
+        updatedAt: new Date().toISOString(),
+      },
+      "streaming-test": {
+        id: "streaming-test-en",
+        slug: "streaming-test",
+        title: "ISR + Streaming Test Page",
+        description:
+          "This page demonstrates how ISR and Streaming work together perfectly",
+        language: "en",
+        seo: {
+          title: "ISR + Streaming Test - Modern Website",
+          description:
+            "Live demonstration of ISR and Streaming working together",
+          keywords: ["isr", "streaming", "nextjs", "test", "demo"],
+        },
+        components: [
+          {
+            id: "test-static-1",
+            type: "text" as const,
+            content: {
+              title: "Static ISR Component",
+              content:
+                "This content is served from ISR cache and loads instantly. It only regenerates every 5 minutes in the background. Perfect for content that doesn't change frequently but needs to be fast.",
+            },
+            settings: { revalidate: 300, streaming: false },
+          },
+          {
+            id: "test-static-2",
+            type: "cta" as const,
+            content: {
+              title: "Another ISR Component",
+              description:
+                "This CTA block is also cached with ISR. Notice how both static components appear immediately.",
+              buttonText: "ISR is Fast!",
+              buttonLink: "/en/about",
+              backgroundColor: "bg-green-600",
+            },
+            settings: { revalidate: 300, streaming: false },
+          },
+          {
+            id: "test-streaming-1",
+            type: "testimonials" as const,
+            content: {
+              title: "Streaming Component (3s delay)",
+              testimonials: [
+                {
+                  id: "1",
+                  name: "ISR User",
+                  company: "Fast Loading Co",
+                  content:
+                    "ISR gives us instant page loads for our static content!",
+                  avatar: "/placeholder.svg?height=80&width=80",
+                },
+                {
+                  id: "2",
+                  name: "Streaming User",
+                  company: "Dynamic Data Inc",
+                  content:
+                    "Streaming keeps our dynamic content fresh without blocking the page!",
+                  avatar: "/placeholder.svg?height=80&width=80",
+                },
+              ],
+            },
+            settings: { revalidate: 60, streaming: true },
           },
         ],
         updatedAt: new Date().toISOString(),
@@ -145,7 +219,8 @@ const cmsData = {
         language: "es",
         seo: {
           title: "Inicio - Sitio Web Moderno",
-          description: "Bienvenido a nuestro sitio web moderno construido con Next.js",
+          description:
+            "Bienvenido a nuestro sitio web moderno construido con Next.js",
           keywords: ["nextjs", "cms", "moderno", "sitio web"],
         },
         components: [
@@ -247,12 +322,79 @@ const cmsData = {
             type: "cta" as const,
             content: {
               title: "¿Listo para Trabajar Juntos?",
-              description: "Hablemos sobre tu próximo proyecto y cómo podemos ayudarte a alcanzar tus objetivos.",
+              description:
+                "Hablemos sobre tu próximo proyecto y cómo podemos ayudarte a alcanzar tus objetivos.",
               buttonText: "Contáctanos",
               buttonLink: "/es/contact",
               backgroundColor: "bg-blue-600",
             },
             settings: { revalidate: 3600, streaming: false },
+          },
+        ],
+        updatedAt: new Date().toISOString(),
+      },
+      "streaming-test": {
+        id: "streaming-test-es",
+        slug: "streaming-test",
+        title: "Página de Prueba ISR + Streaming",
+        description:
+          "Esta página demuestra cómo ISR y Streaming funcionan perfectamente juntos",
+        language: "es",
+        seo: {
+          title: "Prueba ISR + Streaming - Sitio Web Moderno",
+          description:
+            "Demostración en vivo de ISR y Streaming trabajando juntos",
+          keywords: ["isr", "streaming", "nextjs", "prueba", "demo"],
+        },
+        components: [
+          {
+            id: "test-static-1-es",
+            type: "text" as const,
+            content: {
+              title: "Componente ISR Estático",
+              content:
+                "Este contenido se sirve desde la caché ISR y carga instantáneamente. Solo se regenera cada 5 minutos en segundo plano. Perfecto para contenido que no cambia frecuentemente pero necesita ser rápido.",
+            },
+            settings: { revalidate: 300, streaming: false },
+          },
+          {
+            id: "test-static-2-es",
+            type: "cta" as const,
+            content: {
+              title: "Otro Componente ISR",
+              description:
+                "Este bloque CTA también está en caché con ISR. Nota cómo ambos componentes estáticos aparecen inmediatamente.",
+              buttonText: "¡ISR es Rápido!",
+              buttonLink: "/es/about",
+              backgroundColor: "bg-green-600",
+            },
+            settings: { revalidate: 300, streaming: false },
+          },
+          {
+            id: "test-streaming-1-es",
+            type: "testimonials" as const,
+            content: {
+              title: "Componente Streaming (retraso 3s)",
+              testimonials: [
+                {
+                  id: "1",
+                  name: "Usuario ISR",
+                  company: "Carga Rápida SA",
+                  content:
+                    "¡ISR nos da cargas de página instantáneas para nuestro contenido estático!",
+                  avatar: "/placeholder.svg?height=80&width=80",
+                },
+                {
+                  id: "2",
+                  name: "Usuario Streaming",
+                  company: "Datos Dinámicos Inc",
+                  content:
+                    "¡Streaming mantiene nuestro contenido dinámico fresco sin bloquear la página!",
+                  avatar: "/placeholder.svg?height=80&width=80",
+                },
+              ],
+            },
+            settings: { revalidate: 60, streaming: true },
           },
         ],
         updatedAt: new Date().toISOString(),
@@ -366,7 +508,8 @@ const cmsData = {
         featuredImage: "/placeholder.svg?height=400&width=800",
         seo: {
           title: "Exploring Next.js 15 New Features - Modern Website",
-          description: "Discover the latest features and improvements in Next.js 15",
+          description:
+            "Discover the latest features and improvements in Next.js 15",
           keywords: ["nextjs", "react", "web development", "javascript"],
         },
       },
@@ -374,7 +517,8 @@ const cmsData = {
         id: "post-2-en",
         slug: "isr-streaming-guide",
         title: "ISR and Streaming: The Perfect Combination",
-        excerpt: "Learn how to combine Incremental Static Regeneration with streaming for optimal performance.",
+        excerpt:
+          "Learn how to combine Incremental Static Regeneration with streaming for optimal performance.",
         content:
           "Incremental Static Regeneration (ISR) and streaming with Suspense can work together beautifully. While ISR handles the static content that doesn't change frequently, streaming allows dynamic content to load progressively. This combination provides the best of both worlds: fast initial page loads and fresh dynamic content.",
         author: {
@@ -388,7 +532,8 @@ const cmsData = {
         featuredImage: "/placeholder.svg?height=400&width=800",
         seo: {
           title: "ISR and Streaming: The Perfect Combination - Modern Website",
-          description: "Learn how to combine ISR with streaming for optimal performance",
+          description:
+            "Learn how to combine ISR with streaming for optimal performance",
           keywords: ["isr", "streaming", "nextjs", "performance"],
         },
       },
@@ -396,7 +541,8 @@ const cmsData = {
         id: "post-3-en",
         slug: "cms-architecture-patterns",
         title: "Modern CMS Architecture Patterns",
-        excerpt: "Exploring headless CMS patterns and how they integrate with modern frameworks.",
+        excerpt:
+          "Exploring headless CMS patterns and how they integrate with modern frameworks.",
         content:
           "Headless CMS architecture has revolutionized how we build and manage content-driven websites. By separating content management from presentation, we can create more flexible, scalable, and maintainable applications. This approach works particularly well with modern frameworks like Next.js.",
         author: {
@@ -434,8 +580,10 @@ const cmsData = {
         tags: ["nextjs", "react", "desarrollo-web"],
         featuredImage: "/placeholder.svg?height=400&width=800",
         seo: {
-          title: "Explorando las Nuevas Características de Next.js 15 - Sitio Web Moderno",
-          description: "Descubre las últimas características y mejoras en Next.js 15",
+          title:
+            "Explorando las Nuevas Características de Next.js 15 - Sitio Web Moderno",
+          description:
+            "Descubre las últimas características y mejoras en Next.js 15",
           keywords: ["nextjs", "react", "desarrollo web", "javascript"],
         },
       },
@@ -457,7 +605,8 @@ const cmsData = {
       postId: "post-1-en",
       author: "Jane Smith",
       email: "jane@example.com",
-      content: "Thanks for the detailed explanation. I'm excited to try out the new caching features.",
+      content:
+        "Thanks for the detailed explanation. I'm excited to try out the new caching features.",
       createdAt: "2024-12-15T14:15:00Z",
       approved: true,
     },
@@ -476,130 +625,176 @@ const cmsData = {
       postId: "post-2-en",
       author: "Maria Garcia",
       email: "maria@example.com",
-      content: "This helped me understand the concepts much better. Looking forward to implementing this pattern.",
+      content:
+        "This helped me understand the concepts much better. Looking forward to implementing this pattern.",
       createdAt: "2024-12-14T18:20:00Z",
       approved: true,
     },
   ],
-}
+};
 
 // Core CMS API Functions
-export async function getPage(slug: string, language: string): Promise<CMSPage | null> {
-  console.log(`📄 getPage called: slug="${slug}", language="${language}"`)
-  await delay(100)
+export async function getPage(
+  slug: string,
+  language: string
+): Promise<CMSPage | null> {
+  console.log(`📄 getPage called: slug="${slug}", language="${language}"`);
+  await delay(100);
 
-  const pageKey = slug === "" ? "home" : slug
-  const page = cmsData.pages[language as keyof typeof cmsData.pages]?.[pageKey as keyof typeof cmsData.pages.en]
+  const pageKey = slug === "" ? "home" : slug;
+  const page =
+    cmsData.pages[language as keyof typeof cmsData.pages]?.[
+      pageKey as keyof typeof cmsData.pages.en
+    ];
 
-  console.log(`📄 getPage result: ${page ? "found" : "not found"}`)
-  return page || null
+  console.log(`📄 getPage result: ${page ? "found" : "not found"}`);
+  return page || null;
 }
 
-export async function getNavigation(language: string): Promise<CMSNavigation | null> {
-  console.log(`🧭 getNavigation called: language="${language}"`)
-  await delay(50)
+export async function getNavigation(
+  language: string
+): Promise<CMSNavigation | null> {
+  console.log(`🧭 getNavigation called: language="${language}"`);
+  await delay(50);
 
-  return cmsData.navigation[language as keyof typeof cmsData.navigation] || null
+  return (
+    cmsData.navigation[language as keyof typeof cmsData.navigation] || null
+  );
 }
 
-export async function getGlobalSettings(language: string): Promise<CMSGlobalSettings | null> {
-  console.log(`⚙️ getGlobalSettings called: language="${language}"`)
-  await delay(50)
+export async function getGlobalSettings(
+  language: string
+): Promise<CMSGlobalSettings | null> {
+  console.log(`⚙️ getGlobalSettings called: language="${language}"`);
+  await delay(50);
 
-  return cmsData.globalSettings[language as keyof typeof cmsData.globalSettings] || null
+  return (
+    cmsData.globalSettings[language as keyof typeof cmsData.globalSettings] ||
+    null
+  );
 }
 
-export async function getComponent(componentId: string, language: string): Promise<CMSComponent | null> {
-  console.log(`🧩 getComponent called: componentId="${componentId}", language="${language}"`)
-  await delay(3000) // 3 second delay for streaming components
+export async function getComponent(
+  componentId: string,
+  language: string
+): Promise<CMSComponent | null> {
+  console.log(
+    `🧩 getComponent called: componentId="${componentId}", language="${language}"`
+  );
+  await delay(3000); // 3 second delay for streaming components
 
-  const pages = cmsData.pages[language as keyof typeof cmsData.pages]
+  const pages = cmsData.pages[language as keyof typeof cmsData.pages];
   if (!pages) {
-    console.log(`🧩 getComponent: no pages found for language "${language}"`)
-    return null
+    console.log(`🧩 getComponent: no pages found for language "${language}"`);
+    return null;
   }
 
   for (const page of Object.values(pages)) {
-    const component = page.components.find((c) => c.id === componentId)
+    const component = page.components.find((c) => c.id === componentId);
     if (component) {
-      console.log(`🧩 getComponent: found component "${componentId}"`)
-      return component
+      console.log(`🧩 getComponent: found component "${componentId}"`);
+      return component;
     }
   }
 
-  console.log(`🧩 getComponent: component "${componentId}" not found`)
-  return null
+  console.log(`🧩 getComponent: component "${componentId}" not found`);
+  return null;
 }
 
 // Blog-specific CMS functions
-export async function getBlogPosts(language: string, limit?: number): Promise<CMSBlogPost[]> {
-  console.log(`📝 getBlogPosts called: language="${language}", limit=${limit}`)
-  await delay(2000) // 2 second delay for blog listing
+export async function getBlogPosts(
+  language: string,
+  limit?: number
+): Promise<CMSBlogPost[]> {
+  console.log(`📝 getBlogPosts called: language="${language}", limit=${limit}`);
+  await delay(2000); // 2 second delay for blog listing
 
-  const posts = cmsData.blogPosts[language as keyof typeof cmsData.blogPosts] || []
-  const sortedPosts = [...posts].sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+  const posts =
+    cmsData.blogPosts[language as keyof typeof cmsData.blogPosts] || [];
+  const sortedPosts = [...posts].sort(
+    (a, b) =>
+      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+  );
 
-  console.log(`📝 getBlogPosts: returning ${sortedPosts.length} posts`)
-  return limit ? sortedPosts.slice(0, limit) : sortedPosts
+  console.log(`📝 getBlogPosts: returning ${sortedPosts.length} posts`);
+  return limit ? sortedPosts.slice(0, limit) : sortedPosts;
 }
 
-export async function getBlogPost(slug: string, language: string): Promise<CMSBlogPost | null> {
-  console.log(`📝 getBlogPost called: slug="${slug}", language="${language}"`)
-  await delay(100)
+export async function getBlogPost(
+  slug: string,
+  language: string
+): Promise<CMSBlogPost | null> {
+  console.log(`📝 getBlogPost called: slug="${slug}", language="${language}"`);
+  await delay(100);
 
-  const posts = cmsData.blogPosts[language as keyof typeof cmsData.blogPosts] || []
-  return posts.find((post) => post.slug === slug) || null
+  const posts =
+    cmsData.blogPosts[language as keyof typeof cmsData.blogPosts] || [];
+  return posts.find((post) => post.slug === slug) || null;
 }
 
-export async function getBlogComments(postId: string): Promise<CMSBlogComment[]> {
-  console.log(`💬 getBlogComments called: postId="${postId}"`)
-  await delay(2500) // 2.5 second delay for comments
+export async function getBlogComments(
+  postId: string
+): Promise<CMSBlogComment[]> {
+  console.log(`💬 getBlogComments called: postId="${postId}"`);
+  await delay(2500); // 2.5 second delay for comments
 
   try {
     const comments = cmsData.blogComments
       .filter((comment) => comment.postId === postId && comment.approved)
-      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
 
-    console.log(`💬 getBlogComments: returning ${comments.length} comments`)
-    return comments
+    console.log(`💬 getBlogComments: returning ${comments.length} comments`);
+    return comments;
   } catch (error) {
-    console.error("Error fetching comments:", error)
-    return []
+    console.error("Error fetching comments:", error);
+    return [];
   }
 }
 
-export async function getRelatedBlogPosts(currentPostId: string, language: string, limit = 3): Promise<CMSBlogPost[]> {
-  console.log(`🔗 getRelatedBlogPosts called: currentPostId="${currentPostId}", language="${language}"`)
-  await delay(2000) // 2 second delay for related posts
+export async function getRelatedBlogPosts(
+  currentPostId: string,
+  language: string,
+  limit = 3
+): Promise<CMSBlogPost[]> {
+  console.log(
+    `🔗 getRelatedBlogPosts called: currentPostId="${currentPostId}", language="${language}"`
+  );
+  await delay(2000); // 2 second delay for related posts
 
   try {
-    const posts = cmsData.blogPosts[language as keyof typeof cmsData.blogPosts] || []
-    const otherPosts = posts.filter((post) => post.id !== currentPostId)
-    const shuffled = [...otherPosts].sort(() => 0.5 - Math.random())
-    return shuffled.slice(0, limit)
+    const posts =
+      cmsData.blogPosts[language as keyof typeof cmsData.blogPosts] || [];
+    const otherPosts = posts.filter((post) => post.id !== currentPostId);
+    const shuffled = [...otherPosts].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, limit);
   } catch (error) {
-    console.error("Error fetching related posts:", error)
-    return []
+    console.error("Error fetching related posts:", error);
+    return [];
   }
 }
 
-export async function generateStaticBlogParams(): Promise<{ lang: string; slug: string }[]> {
-  const params: { lang: string; slug: string }[] = []
+export async function generateStaticBlogParams(): Promise<
+  { lang: string; slug: string }[]
+> {
+  const params: { lang: string; slug: string }[] = [];
 
   for (const [language, posts] of Object.entries(cmsData.blogPosts)) {
     for (const post of posts) {
-      params.push({ lang: language, slug: post.slug })
+      params.push({ lang: language, slug: post.slug });
     }
   }
 
-  return params
+  return params;
 }
 
 // Utility functions
 export function getSupportedLanguages(): string[] {
-  return ["en", "es"]
+  return ["en", "es"];
 }
 
 export function isValidLanguage(lang: string): boolean {
-  return getSupportedLanguages().includes(lang)
+  return getSupportedLanguages().includes(lang);
 }
